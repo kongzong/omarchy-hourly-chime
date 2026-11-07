@@ -1,0 +1,9 @@
+{
+  "hourlyChime.title": "Hourly Chime",
+  "hourlyChime.doNotDisturb": "Do not disturb",
+  "hourlyChime.rangeTo": "to",
+  "hourlyChime.tooltipOn": "Hourly chime on · quiet %1–%2",
+  "hourlyChime.tooltipOff": "Hourly chime off",
+  "hourlyChime.notificationTitle": "Hourly Chime",
+  "hourlyChime.notificationBody": "It's %1"
+}

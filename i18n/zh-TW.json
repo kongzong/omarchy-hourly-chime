@@ -1,0 +1,9 @@
+{
+  "hourlyChime.title": "整點報時",
+  "hourlyChime.doNotDisturb": "免打擾",
+  "hourlyChime.rangeTo": "至",
+  "hourlyChime.tooltipOn": "整點報時已開啟 · 靜音 %1–%2",
+  "hourlyChime.tooltipOff": "整點報時已關閉",
+  "hourlyChime.notificationTitle": "整點報時",
+  "hourlyChime.notificationBody": "現在是 %1"
+}
