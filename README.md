@@ -7,6 +7,8 @@ with a configurable do-not-disturb window — as an Omarchy shell bar widget.
 ![license](https://img.shields.io/badge/license-MIT-green)
 ![omarchy](https://img.shields.io/badge/omarchy-4.5%2B-blue)
 
+![The Hourly Chime panel open under the bar](preview.png)
+
 ## Features
 
 - Watch icon on the bar (bright = chime on, dimmed = chime off), click to open
