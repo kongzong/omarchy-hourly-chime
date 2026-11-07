@@ -28,6 +28,9 @@ Panel {
   property bool chimeOn: false
   property int dndStartMin: 23 * 60
   property int dndEndMin: 7 * 60
+  // Wall-clock hour of the last chime we handled. Guarantees at most one
+  // notification per hour regardless of how many ticks land in minute 0.
+  property string lastFiredHour: ""
 
   readonly property string statePath: (Quickshell.env("XDG_STATE_HOME") || (Quickshell.env("HOME") + "/.local/state")) + "/hourly-chime.json"
 
@@ -132,10 +135,28 @@ Panel {
   }
 
   // ------------------------------------------------------- minute tick
+  // Aim a little AFTER the next minute boundary, not exactly at it. QQmlTimer
+  // schedules the next tick relative to the *previous tick timestamp*, but the
+  // Date below is read a few ms later inside the handler; targeting :00.000
+  // made the next tick land at :59.99x — still minute 0 — so the hour chimed
+  // twice (:00.003 and :00.998). The 50 ms epsilon keeps ticks on the far
+  // side of the boundary; hourKey() below is the hard guarantee if a slow
+  // handler, a suspend or a clock step defeats it anyway.
+  // See tools/repro-double-chime.mjs for the regression replay.
   function msToNextMinute() {
     var now = new Date()
-    var next = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes() + 1, 0, 0)
-    return Math.max(1000, next.getTime() - now.getTime())
+    var next = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
+                        now.getHours(), now.getMinutes() + 1, 0, 50)
+    // The clamp only guards a backwards clock step / DST normalisation.
+    return Math.max(50, next.getTime() - now.getTime())
+  }
+
+  // Second line of defence: one chime per wall-clock hour, whatever the tick
+  // timing. Deliberately conservative — if the clock steps or DST repeats an
+  // hour, we would rather skip than chime twice. The hour is marked handled
+  // even when the chime is off or inside the quiet window: no late catch-up.
+  function hourKey(d) {
+    return d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate() + "-" + d.getHours()
   }
 
   // Wake every minute and fire at :00. If a tick was missed (e.g. after
@@ -148,7 +169,13 @@ Panel {
     interval: 60000
     onTriggered: {
       var now = new Date()
-      if (now.getMinutes() === 0) root.fireChime(now.getHours() * 60 + now.getMinutes())
+      if (now.getMinutes() === 0) {
+        var key = root.hourKey(now)
+        if (key !== root.lastFiredHour) {
+          root.lastFiredHour = key
+          root.fireChime(now.getHours() * 60 + now.getMinutes())
+        }
+      }
       tickTimer.interval = root.msToNextMinute()
     }
   }

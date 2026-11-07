@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "com.github.kongzong.hourly-chime",
   "name": "Hourly Chime",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "kongzong",
   "license": "MIT",
   "description": "A Casio-style beep and notification at the top of every hour, with a configurable do-not-disturb window.",

@@ -130,10 +130,15 @@ translated by the shell (first-party plugins are English there too).
 │   ├── en.json            # base catalog
 │   ├── zh-CN.json
 │   └── zh-TW.json
-└── tools/make-chime.sh    # ffmpeg sound synthesizer (reproducible, tunable)
+├── tools/make-chime.sh           # ffmpeg sound synthesizer (reproducible, tunable)
+└── tools/repro-double-chime.mjs  # timer regression replay (`node tools/…`)
 ```
 
 ## History
+
+2.1.1 fixes a timer bug that chimed twice at the top of an hour (once at
+`:00.003` and again at `:00.998`) and could skip later hours entirely. Ticks
+now align just after the minute boundary and each wall-clock hour is deduplicated.
 
 2.1.0 adds display-language support (English, Simplified and Traditional
 Chinese) on top of Omarchy's translation layer.
