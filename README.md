@@ -50,18 +50,19 @@ omarchy plugin enable com.github.kongzong.hourly-chime --section right
 
 `--section` takes `left`, `centerBegin`, `center`, `centerEnd`, `tray` or `right`.
 
-### Manual install (no git clone)
+### Manual install
+
+If `omarchy plugin add` cannot reach GitHub on your network, put a copy of this
+repository's files into `~/.config/omarchy/plugins/com.github.kongzong.hourly-chime/`
+(the directory must contain `manifest.json`), then:
 
 ```bash
-git clone https://github.com/kongzong/omarchy-hourly-chime.git
-mkdir -p ~/.config/omarchy/plugins/hourly-chime
-cp -r omarchy-hourly-chime/. ~/.config/omarchy/plugins/hourly-chime/
 omarchy-shell shell rescanPlugins
 omarchy plugin enable com.github.kongzong.hourly-chime
 ```
 
-A hand-copied folder has no `.git`, so `omarchy plugin update` will not manage
-it — prefer `omarchy plugin add`.
+A hand-copied folder has no `.git` metadata, so `omarchy plugin update` will not
+manage it — prefer `omarchy plugin add` when it works.
 
 ## Update
 
@@ -98,7 +99,7 @@ what the widget plays.
 
 Only components Omarchy 4.x already ships: `quickshell` (omarchy-shell),
 `paplay` (PipeWire) and `notify-send`. No extra packages, no network access, no
-install hooks, no `sudo`. All state stays in
+install hooks, no elevation or root access. All state stays in
 `${XDG_STATE_HOME:-~/.local/state}/hourly-chime.json`.
 
 ## Languages
